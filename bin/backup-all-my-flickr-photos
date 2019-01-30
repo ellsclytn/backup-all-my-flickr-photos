@@ -47,6 +47,8 @@ def main():
         i += 1
         print("Item %04d/%04d entitled %s" % (i, total_photos, photo.title))
         filename = automatic_retry(lambda: download_item(photo, download_dir))
+        if filename is None:
+            continue
         files_in_flickr.add(os.path.realpath(filename))
 
     if args.delete:
@@ -234,7 +236,7 @@ def automatic_retry(function):
                 print("Unrecognized socket error", file=sys.stderr)
                 raise
     print("Reached number of retries: %d" % (retries,))
-    return function()
+    return None
 
 
 if __name__ == "__main__":
